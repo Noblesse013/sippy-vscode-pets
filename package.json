@@ -1,0 +1,103 @@
+{
+  "name": "sippy-water-pet",
+  "displayName": "Sippy — Virtual Hydration Pet",
+  "description": "A compact cozy pixel-art Sippy pet for VS Code Explorer: feed, play, rest, and water reminders.",
+  "version": "0.5.0",
+  "publisher": "local-dev",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onView:sippy.petView",
+    "onCommand:sippy.open",
+    "onCommand:sippy.logWater",
+    "onCommand:sippy.feed",
+    "onCommand:sippy.resetToday"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "sippy.open",
+        "title": "Sippy: Open Pet Room"
+      },
+      {
+        "command": "sippy.logWater",
+        "title": "Sippy: Log Water"
+      },
+      {
+        "command": "sippy.feed",
+        "title": "Sippy: Feed Sippy"
+      },
+      {
+        "command": "sippy.resetToday",
+        "title": "Sippy: Reset Today's Water"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "sippy.petView",
+          "name": "Sippy's Room",
+          "type": "webview",
+          "visibility": "visible"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Sippy",
+      "properties": {
+        "sippy.dailyGoal": {
+          "type": "number",
+          "default": 2000,
+          "minimum": 1,
+          "maximum": 10000,
+          "description": "Daily water goal in ml."
+        },
+        "sippy.reminderMinutes": {
+          "type": "number",
+          "default": 45,
+          "minimum": 5,
+          "maximum": 240,
+          "description": "Minutes between reminders while VS Code is running."
+        },
+        "sippy.remindersEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show VS Code hydration reminders."
+        },
+        "sippy.codingReactions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Let Sippy react to saves, task results, git commits and error counts."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "test": "node tests/test-extension.cjs",
+    "check": "node --check extension.js && node tests/test-extension.cjs"
+  },
+  "icon": "media/sippy-publisher-icon.png",
+  "keywords": [
+    "pet",
+    "water",
+    "hydration",
+    "penguin",
+    "tamagotchi",
+    "virtual pet"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Noblesse013/sippy-vscode-pet.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Noblesse013/sippy-vscode-pet/issues"
+  },
+  "homepage": "https://github.com/Noblesse013/sippy-vscode-pet#readme"
+}

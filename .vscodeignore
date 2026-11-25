@@ -1,0 +1,10 @@
+**/.git/**
+.github/**
+.vscode/**
+tests/**
+*.zip
+*.vsix
+media/preview.html
+
+sippy-cozy-reference.png
+preview-cozy.png
