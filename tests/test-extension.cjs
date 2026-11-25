@@ -88,6 +88,9 @@ const context={subscriptions:[],extensionPath:path.resolve(__dirname,'..'),exten
   assert.equal(ext.paceMood(2000,2000,at(15)),'done');
   assert.equal(ext.isLate(at(23)),true);assert.equal(ext.isLate(at(14)),false);
   assert(['ok','thirsty','done'].includes(viewProvider.state().mood));
+  assert.deepEqual(viewProvider.state().sound,{enabled:true,volume:40},'Sound settings reach the webview');
+  assert(commands.has('sippy.toggleSound'),'Toggle sound command');
+  assert(html.includes('createOscillator')&&html.includes('SOUNDS'),'Web Audio sounds in webview');
   // Coding reactions
   const reacts=()=>messages.filter(m=>m.type==='react').map(m=>m.kind);
   hooks.save();hooks.save();

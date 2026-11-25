@@ -16,6 +16,7 @@
     "onCommand:sippy.open",
     "onCommand:sippy.logWater",
     "onCommand:sippy.feed",
+    "onCommand:sippy.toggleSound",
     "onCommand:sippy.resetToday"
   ],
   "main": "./extension.js",
@@ -32,6 +33,10 @@
       {
         "command": "sippy.feed",
         "title": "Sippy: Feed Sippy"
+      },
+      {
+        "command": "sippy.toggleSound",
+        "title": "Sippy: Toggle Sound"
       },
       {
         "command": "sippy.resetToday",
@@ -74,6 +79,18 @@
           "type": "boolean",
           "default": true,
           "description": "Let Sippy react to saves, task results, git commits and error counts."
+        },
+        "sippy.sound": {
+          "type": "boolean",
+          "default": true,
+          "description": "Play Sippy's little retro sounds (sips, munching, cheers, yawns, sniffles)."
+        },
+        "sippy.soundVolume": {
+          "type": "number",
+          "default": 40,
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Volume of Sippy's sounds, from 0 to 100."
         }
       }
     }

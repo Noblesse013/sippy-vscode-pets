@@ -32,7 +32,7 @@ body{background:var(--vscode-sideBar-background);color:var(--vscode-foreground);
 .mood-tag{position:absolute;z-index:2;left:19%;top:30%;font-weight:900;line-height:1;pointer-events:none;opacity:0;transition:opacity .35s ease}
 .mood-tag[data-face=sleep],.mood-tag[data-face=happy]{opacity:1}
 .mood-tag[data-face=sleep]::after{content:'z Z';font-size:9cqw;color:#3d6fd6;letter-spacing:-.05em;text-shadow:0 0 2px #fff}
-.mood-tag[data-face=happy]::after{content:'¶5';font-size:10cqw;color:#ff6f91;text-shadow:0 0 2px #fff}
+.mood-tag[data-face=happy]::after{content:'';display:block;width:9cqw;height:8.3cqw;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 11'%3E%3Cpath d='M6 10.5 1.2 5.8A3 3 0 0 1 6 2a3 3 0 0 1 4.8 3.8z' fill='%23ff6f91' stroke='%23fff' stroke-width='1'/%3E%3C/svg%3E") center/contain no-repeat}
 .food-menu{position:absolute;z-index:5;left:50%;top:23%;transform:translateX(-50%);display:flex;gap:1px;padding:2px 3px;background:#fff7eef2;border:1px solid #eaa6b8;border-radius:6px;box-shadow:0 1px 2px #0003}
 .food-menu[hidden]{display:none}
 .food-menu button{border:0;background:transparent;font-size:12px;line-height:1;padding:2px;border-radius:4px;font-family:'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji',sans-serif}
@@ -105,12 +105,36 @@ function idle(s){
 }
 const breath=document.getElementById('breath');
 const moodTag=document.getElementById('moodTag');
+// ---- Sound: tiny retro tones made with Web Audio (no sound files). ----
+let audioCtx=null;
+function ctx(){if(!audioCtx){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;audioCtx=new AC();}if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx;}
+// Webviews only allow audio after a click or key press inside Sippy's Room.
+for(const ev of ['pointerdown','keydown'])document.addEventListener(ev,()=>ctx(),{once:true});
+function tone(a,freq,at,dur,{type='triangle',vol=1,to}={}){
+ const o=a.createOscillator(),g=a.createGain(),t=a.currentTime+at,v=Math.max(.0001,vol*(currentState.sound.volume/100)*.22);
+ o.type=type;o.frequency.setValueAtTime(freq,t);if(to)o.frequency.exponentialRampToValueAtTime(to,t+dur);
+ g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+ o.connect(g).connect(a.destination);o.start(t);o.stop(t+dur+.02);}
+const SOUNDS={
+ drink:a=>{tone(a,320,0,.12,{type:'sine',to:820});tone(a,420,.14,.12,{type:'sine',to:1000,vol:.8})},          // bloop bloop
+ feed:a=>{tone(a,330,0,.07,{type:'square',vol:.45});tone(a,392,.12,.07,{type:'square',vol:.45});tone(a,330,.24,.07,{type:'square',vol:.45})}, // nom nom nom
+ play:a=>[523,659,784].forEach((f,i)=>tone(a,f,i*.08,.14)),                                                    // happy arpeggio
+ wave:a=>{tone(a,880,0,.08);tone(a,1175,.09,.12)},                                                             // hi chirp
+ rest:a=>[523,440,392].forEach((f,i)=>tone(a,f,i*.22,.3,{type:'sine',vol:.6})),                                // sleepy lullaby
+ dance:a=>[523,659,784,1047].forEach((f,i)=>tone(a,f,i*.07,i===3?.25:.1,{type:'square',vol:.4})),           // commit party
+ worried:a=>{tone(a,440,0,.16);tone(a,370,.18,.24)},                                                           // uh-oh
+ cry:a=>{tone(a,520,0,.3,{to:340});tone(a,480,.34,.38,{to:300})},                                             // sniffle wah-wah
+ goal:a=>[523,659,784,1047].forEach((f,i)=>tone(a,f,i*.11,i===3?.5:.12,{type:'square',vol:.45})),           // fanfare
+ menu:a=>tone(a,1250,0,.04,{type:'square',vol:.3})                                                            // tick
+};
+SOUNDS.cheer=SOUNDS.play;
+function sound(name){if(!currentState||!currentState.sound||!currentState.sound.enabled||!SOUNDS[name])return;const a=ctx();if(a)SOUNDS[name](a);}
 function setFace(f){mascot.dataset.face=f;if(f!=='blink')moodTag.dataset.face=f;if(f!=='blink')breath.dataset.breath=f==='sleep'?'sleep':f==='cry'?'sob':'calm';}
 function showIdle(){animationTimeout=null;if(!currentState)return;const[text,cls]=idle(currentState);message.textContent=text;mascot.className=cls?'mascot '+cls:'mascot';setFace(IDLE_FACE[cls]||'open');}
 // Blink every few seconds while eyes are open (sometimes a double blink).
 function blinkLoop(){setTimeout(()=>{if(mascot.dataset.face==='open'){setFace('blink');setTimeout(()=>{if(mascot.dataset.face==='blink')setFace('open');if(Math.random()<.25)setTimeout(()=>{if(mascot.dataset.face==='open'){setFace('blink');setTimeout(()=>{if(mascot.dataset.face==='blink')setFace('open')},130)}},180)},130)}blinkLoop()},2500+Math.random()*3500)}
 blinkLoop();
-function play(text,kind){clearTimeout(animationTimeout);message.textContent=text;mascot.className='mascot';void mascot.offsetWidth;mascot.classList.add(kind);setFace(FACE[kind]||'open');animationTimeout=setTimeout(showIdle,2300);}
+function play(text,kind){clearTimeout(animationTimeout);sound(kind==='drink'&&currentState&&currentState.total>=currentState.goal?'goal':kind);message.textContent=text;mascot.className='mascot';void mascot.offsetWidth;mascot.classList.add(kind);setFace(FACE[kind]||'open');animationTimeout=setTimeout(showIdle,2300);}
 // Bar geometry in % of egg width: left edge, then right edge after 1..4 segments.
 const BARS={heart:[31.95,[36.39,40.09,44.08,49.26]],water:[61.24,[65.24,68.93,72.78,77.81]]};
 function setBar(id,[left,edges],n){const right=n?edges[n-1]:left;document.getElementById(id).style.clipPath=`inset(0 ${(100-right).toFixed(2)}% 0 ${left}%)`;}
@@ -132,7 +156,7 @@ function render(s,action){update(s);const[act,food]=String(action||'').split(':'
 window.addEventListener('message',e=>{const d=e.data;if(!d)return;if(d.type==='state')render(d.state,d.animation);if(d.type==='react'&&REACT[d.kind]){update(d.state);play(...REACT[d.kind])}});
 const feedBtn=document.getElementById('feed');const foodMenu=document.getElementById('foodMenu');let menuTimer;
 function setMenu(open){foodMenu.hidden=!open;feedBtn.setAttribute('aria-expanded',String(open));clearTimeout(menuTimer);
- if(open){message.textContent='Pick a snack!';foodMenu.querySelector('button').focus();menuTimer=setTimeout(()=>setMenu(false),8000);}}
+ if(open){message.textContent='Pick a snack!';sound('menu');foodMenu.querySelector('button').focus();menuTimer=setTimeout(()=>setMenu(false),8000);}}
 feedBtn.addEventListener('click',e=>{e.stopPropagation();setMenu(foodMenu.hidden);});
 for(const b of foodMenu.querySelectorAll('button'))b.addEventListener('click',e=>{e.stopPropagation();setMenu(false);vscode.postMessage({type:'care',action:'feed',food:b.dataset.food});});
 document.addEventListener('click',e=>{if(!foodMenu.hidden&&!foodMenu.contains(e.target))setMenu(false);});

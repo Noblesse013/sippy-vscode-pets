@@ -46,6 +46,12 @@ function activate(context) {
     const pick = await vscode.window.showQuickPick(items, { placeHolder:'What should Sippy eat?' });
     if (pick) await provider.care('feed', pick.id);
   }));
+  context.subscriptions.push(vscode.commands.registerCommand('sippy.toggleSound', async () => {
+    const settings = vscode.workspace.getConfiguration('sippy');
+    const on = !settings.get('sound', true);
+    await settings.update('sound', on, vscode.ConfigurationTarget.Global);
+    vscode.window.showInformationMessage(on ? 'Sippy sounds on 🔊' : 'Sippy sounds off 🔇');
+  }));
   context.subscriptions.push(vscode.commands.registerCommand('sippy.resetToday', async () => { await provider.resetToday(); }));
   context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(async e => {
     if (e.affectsConfiguration('sippy')) { await provider.normalizeGoal(); provider.send(); startReminders(); }
@@ -119,7 +125,8 @@ class SippyProvider {
   }
   state() {
     const saved=this.context.globalState.get(WATER_KEY,{});
-    const goal=Math.max(1,Number(vscode.workspace.getConfiguration('sippy').get('dailyGoal',2000)));
+    const settings=vscode.workspace.getConfiguration('sippy');
+    const goal=Math.max(1,Number(settings.get('dailyGoal',2000)));
     const day=today();
     const total=saved.day===day?clamp(saved.total||0,0,goal):0;
     const now=new Date();
@@ -127,6 +134,7 @@ class SippyProvider {
       lastDrink:saved.day===day?saved.lastDrink||0:0,
       lastReminder:this.context.globalState.get('sippy.lastReminder',Date.now()),
       mood:paceMood(total,goal,now),late:isLate(now),
+      sound:{enabled:settings.get('sound',true)!==false,volume:clamp(Number(settings.get('soundVolume',40))||0,0,100)},
       pet:this.petState()};
   }
   async normalizeGoal() {
