@@ -1,9 +1,9 @@
 {
   "name": "sippy-water-pet",
   "displayName": "Sippy — Virtual Hydration Pet",
-  "description": "A compact cozy pixel-art Sippy pet for VS Code Explorer: feed, play, rest, and water reminders.",
-  "version": "0.5.0",
-  "publisher": "local-dev",
+  "description": "A compact cozy pixel-art Sippy pet for VS Code Explorer: feed, pat, rest, and water reminders.",
+  "version": "0.8.5",
+  "publisher": "fiona-studio",
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -11,13 +11,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onStartupFinished",
-    "onView:sippy.petView",
-    "onCommand:sippy.open",
-    "onCommand:sippy.logWater",
-    "onCommand:sippy.feed",
-    "onCommand:sippy.toggleSound",
-    "onCommand:sippy.resetToday"
+    "onStartupFinished"
   ],
   "main": "./extension.js",
   "contributes": {
@@ -39,6 +33,10 @@
         "title": "Sippy: Toggle Sound"
       },
       {
+        "command": "sippy.toggleSleep",
+        "title": "Sippy: Put to Sleep / Wake Up"
+      },
+      {
         "command": "sippy.resetToday",
         "title": "Sippy: Reset Today's Water"
       }
@@ -49,6 +47,7 @@
           "id": "sippy.petView",
           "name": "Sippy's Room",
           "type": "webview",
+          "icon": "media/sippy-icon.svg",
           "visibility": "visible"
         }
       ]
@@ -111,10 +110,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Noblesse013/sippy-vscode-pet.git"
+    "url": "https://github.com/Noblesse013/sippy-vscode-pets.git"
   },
   "bugs": {
-    "url": "https://github.com/Noblesse013/sippy-vscode-pet/issues"
+    "url": "https://github.com/Noblesse013/sippy-vscode-pets/issues"
   },
-  "homepage": "https://github.com/Noblesse013/sippy-vscode-pet#readme"
+  "homepage": "https://github.com/Noblesse013/sippy-vscode-pets#readme"
 }
