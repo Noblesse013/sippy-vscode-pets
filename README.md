@@ -1,6 +1,6 @@
 # Sippy: Cozy Hydration Pet for VS Code
 
-Sippy is a tiny penguin who lives in a turquoise virtual-pet egg in your **Explorer sidebar**. Log your water, feed her snacks, pat her, and she reacts while you code. Drink enough and she glows; forget about her and she gets thirsty.
+Sippy is a tiny penguin who lives in a turquoise virtual-pet egg in your **Explorer sidebar**. Log your water, feed her snacks, pat her, and tuck her in for a nap. She reacts while you code: errors startle her, fixes and commits make her cheer. Drink enough and she glows; forget about her and she gets thirsty.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Noblesse013/sippy-vscode-pets/main/docs/preview-sidebar.png" alt="Sippy's Room in the VS Code Explorer sidebar" width="300">
@@ -20,7 +20,7 @@ Sippy is a tiny penguin who lives in a turquoise virtual-pet egg in your **Explo
 ## Use Sippy
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Noblesse013/sippy-vscode-pets/main/docs/preview-moods.png" alt="Sippy's moods: ready to play, snack menu, goal complete, thirsty, sleepy and crying" width="720">
+  <img src="https://raw.githubusercontent.com/Noblesse013/sippy-vscode-pets/main/docs/preview-moods.png" alt="Sippy's moods: ready for pats, snack menu, goal complete, thirsty, napping and crying" width="720">
 </p>
 
 ### The buttons
@@ -54,7 +54,8 @@ Hover over the egg to see the exact numbers.
 | Night sky in the window | 19:00 to 6:00 |
 | Happy `^ ^` with a ♥ | You care for her, save a file, a build passes, you commit, or you reach your goal |
 | Thirsty (droopy, sad eyes) | You're more than 20% behind where you should be for the time of day (paced from 8:00 to 22:00) |
-| Sleepy `∪ ∪` with "z Z" | Napping (in a nightcap, under her blanket), low energy, or late at night (23:00 to 5:00) |
+| Sleepy (droopy, a bit dim, eyes still open) | Low energy, or late at night (23:00 to 5:00). Press **Zz** to put her to bed |
+| Napping `∪ ∪` with "z Z" | After you press **Zz**: she wears a nightcap, snuggles under her blanket, and the button turns into a ⏰ |
 | Worried | New errors appear in your code ("Oops, an error!", or "So many errors..." at 5 or more) |
 | Crying `> <` with tears | A build or task fails, or she's been neglected for a few days |
 
@@ -131,7 +132,7 @@ node tests/test-extension.cjs
 | `media/window-night.png` | Night-sky window layer, shown from 19:00 to 6:00 |
 | `media/nightcap.png`, `media/blanket.png` | Sleepwear layers shown while she naps |
 | `sippy-cozy-reference.png` | The original design reference |
-| `docs/` | README screenshots (not included in the `.vsix`) |
+| `docs/` | README screenshots, captured from the real `room.html` (not included in the `.vsix`) |
 
 Repository: https://github.com/Noblesse013/sippy-vscode-pets
 
