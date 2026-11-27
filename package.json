@@ -2,7 +2,7 @@
   "name": "sippy-water-pet",
   "displayName": "Sippy — Virtual Hydration Pet",
   "description": "A compact cozy pixel-art Sippy pet for VS Code Explorer: feed, pat, rest, and water reminders.",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "publisher": "fiona-studio",
   "engines": {
     "vscode": "^1.85.0"

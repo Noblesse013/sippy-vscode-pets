@@ -1,3 +1,7 @@
+## 0.8.6: Fresh look
+- New marketplace icon showing today's Sippy in her room.
+- README: new screenshots and a clearer moods table (sleepy vs. napping).
+
 ## 0.8.5: Cozier sleep and a fresh start each day
 - While she naps, the Zz button now shows a small pixel alarm clock instead of a yellow "Wake" label.
 - Every new day (and a brand-new Sippy) starts with her health bar at 2 of 6 segments. Drinking water and caring for her fill it up.
